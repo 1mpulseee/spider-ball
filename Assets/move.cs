@@ -56,6 +56,5 @@ public class move : MonoBehaviour
         DistanceJoint.connectedBody = target;
         DistanceJoint.enabled = true;
         IsConnected = true;
-        float dir = Input.GetAxis("name");
     }
 }
