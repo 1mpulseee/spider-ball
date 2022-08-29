@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class move : MonoBehaviour
 {
-    public Rigidbody2D target;
+    private Rigidbody2D target;
     private Rigidbody2D rb;
     private DistanceJoint2D DistanceJoint;
     private LineRenderer lineRenderer;
@@ -49,6 +49,7 @@ public class move : MonoBehaviour
     }
     public IEnumerator Connect()
     {
+        target = world.instance.GetTarget(transform.position);
         rb.AddForce(new Vector2(target.gameObject.transform.position.x - transform.position.x, target.gameObject.transform.position.y - transform.position.y).normalized * force, ForceMode2D.Impulse);
         IsHook = true;
         yield return new WaitForSeconds(.1f);
