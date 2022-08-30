@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class move : MonoBehaviour
 {
     private Rigidbody2D target;
@@ -9,7 +7,7 @@ public class move : MonoBehaviour
     private DistanceJoint2D DistanceJoint;
     private LineRenderer lineRenderer;
     private bool IsConnected = false;
-    private bool IsHook = false;
+    [HideInInspector] public bool IsHook = false;
     private IEnumerator _Connect;
     public int force;
     private void Start()
