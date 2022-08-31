@@ -1518,6 +1518,10 @@ PrefabInstance:
       propertyPath: quantityTop
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 6759729124415291191, guid: 393137afd78171d428af27fd99ba6953, type: 3}
+      propertyPath: timeTypeConvert
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6759729124415291194, guid: 393137afd78171d428af27fd99ba6953, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
