@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Menu : MonoBehaviour
@@ -12,4 +10,13 @@ public class Menu : MonoBehaviour
             instance = this;
         }
     }
+    public int lvl;
+    [System.Serializable]
+    public enum Scene {main, lb, st, info }
+    public Scene scene
+    {
+        get { return _scene; }
+        set { _scene = value; }
+    }
+    private Scene _scene;
 }

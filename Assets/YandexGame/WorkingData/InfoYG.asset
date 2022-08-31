@@ -19,7 +19,7 @@ MonoBehaviour:
   checkAdblock: 1
   fullscreenAdChallenge: 0
   staticRBTInGame: 0
-  LocalizationEnable: 1
+  LocalizationEnable: 0
   callingLanguageCheck: 0
   translateMethod: 2
   CSVFileTranslate:
@@ -83,4 +83,4 @@ MonoBehaviour:
     de: []
     hi: []
   SDKStartDelay: 0
-  debug: 1
+  debug: 0
