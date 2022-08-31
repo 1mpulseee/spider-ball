@@ -95,6 +95,7 @@ MonoBehaviour:
   quantityAround: 3
   entriesText: {fileID: 7149767997878345386}
   advanced: 0
+  loadAvatars: 1
   playerPhotoSize: 0
   timeTypeConvert: 0
 --- !u!1 &7149767997878345380
@@ -175,4 +176,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ' Leaderboard Entries Text'
+  m_Text: 1 - player1 - 99

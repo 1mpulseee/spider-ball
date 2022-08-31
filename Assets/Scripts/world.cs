@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using YG;
 public class world : MonoBehaviour
 {
     public static world instance;
@@ -20,7 +23,7 @@ public class world : MonoBehaviour
         }
         return rb;
     }
-    public int ChunkCount = 5;
+    private int ChunkCount;
     public GameObject[] Spawns;
     public GameObject[] Chunks;
     public GameObject[] Finishs;
@@ -28,8 +31,19 @@ public class world : MonoBehaviour
     private Vector3 Finish;
     private Transform player;
     private GameObject LastChunk;
+    public Text LvlText;
     private void Start()
     {
+        LvlText.text = Menu.instance.lvl.ToString();
+        ChunkCount = 4;
+        float C_L = Menu.instance.lvl;
+        while (C_L > 1)
+        {
+            ChunkCount++;
+            C_L /= 2;
+        }
+        ChunkCount = (int)(ChunkCount * Random.Range(.5f, 1.5f));
+
         LastChunk = Instantiate(Spawns[Random.Range(0, Spawns.Length)], transform);
         player = GameObject.FindGameObjectWithTag("Player").transform;
         SpawnPoint = player.position;
@@ -68,7 +82,10 @@ public class world : MonoBehaviour
         }
         if (player.transform.position.x > Finish.x)
         {
-            Debug.Log("123");
+            Menu.instance.lvl++;
+            YandexGame.savesData.lvl = Menu.instance.lvl;
+            YandexGame.SaveProgress();
+            SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         }
     }
 }
