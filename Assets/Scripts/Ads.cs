@@ -3,14 +3,14 @@ using YG;
 public class Ads : MonoBehaviour
 {
     public static Ads instance;
-    public YandexGame yg;
+    private YandexGame yg;
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            yg = gameObject.AddComponent<YandexGame>();
+            yg = gameObject.GetComponent<YandexGame>();
         }
     }
 }
