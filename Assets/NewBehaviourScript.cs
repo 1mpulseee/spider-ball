@@ -26,8 +26,6 @@ public class NewBehaviourScript : MonoBehaviour
             rectTransform.sizeDelta = rectTransform.sizeDelta + new Vector2(0, 10);
             yield return new WaitForSeconds(.01f);
         }
-        yield return new WaitForSeconds(2);
-        Debug.Log("Done");
-        StartCoroutine("Fix");
+        text.resizeTextForBestFit = false;
     }
 }

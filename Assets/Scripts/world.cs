@@ -35,12 +35,12 @@ public class world : MonoBehaviour
     private void Start()
     {
         LvlText.text = Menu.instance.lvl.ToString();
-        ChunkCount = 4;
+        ChunkCount = 6;
         float C_L = Menu.instance.lvl;
         while (C_L > 1)
         {
             ChunkCount++;
-            C_L /= 2;
+            C_L /= 1.5f;
         }
         ChunkCount = (int)(ChunkCount * Random.Range(.5f, 1.5f));
 
