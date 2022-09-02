@@ -17,7 +17,7 @@ MonoBehaviour:
   leaderboardEnable: 1
   siteLock: 1
   checkAdblock: 1
-  fullscreenAdChallenge: 0
+  fullscreenAdChallenge: 1
   staticRBTInGame: 0
   LocalizationEnable: 0
   callingLanguageCheck: 0

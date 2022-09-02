@@ -13,4 +13,18 @@ public class Ads : MonoBehaviour
             yg = gameObject.GetComponent<YandexGame>();
         }
     }
+    private float time;
+    public int AdsDelay = 150;
+    private void Update()
+    {
+        time += Time.deltaTime;
+    }
+    public void ShowAds()
+    {
+        if (time > AdsDelay)
+        {
+            time = 0;
+            yg._FullscreenShow();
+        }
+    }
 }
