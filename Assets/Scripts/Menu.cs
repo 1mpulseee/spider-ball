@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using YG;
@@ -44,5 +46,17 @@ public class Menu : MonoBehaviour
         lvl = YandexGame.savesData.lvl;
         leaderboardYG.NewScore(lvl);
         leaderboardYG.UpdateLB();
+    }
+
+    [SerializeField] List<GameObject> Wallpaper;
+    [SerializeField] List<GameObject> imgWallpaper;
+    public void ChangeWallpaper()
+    {
+        //Ads
+        //есть тип список, из списка врубаетс€ фон, типо, фон сет актив (список‘онов[переменна€‘он++])
+        //как фон добавить, чтобы он ни с чем не конфликтовал и ничего не перекрывал(а то верЄвку он перекрывает если просто как объект добавить), не знаю
+        //смена картинки в настройках
+
+
     }
 }
