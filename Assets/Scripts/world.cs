@@ -11,6 +11,8 @@ public class world : MonoBehaviour
     {
         instance = this;
     }
+    private void OnEnable() => YandexGame.CloseVideoEvent += Reward;
+    private void OnDisable() => YandexGame.CloseVideoEvent -= Reward;  
     private List<Rigidbody2D> targets = new List<Rigidbody2D>();
     public Rigidbody2D GetTarget(Vector3 pos)
     {
@@ -85,11 +87,28 @@ public class world : MonoBehaviour
         }
         if (player.transform.position.x > Finish.x)
         {
-            Menu.instance.lvl++;
-            YandexGame.savesData.lvl = Menu.instance.lvl;
-            YandexGame.SaveProgress();
-            Ads.instance.ShowAds();
-            SceneManager.LoadScene("Game");
+            NextLvl();
+        }
+    }
+    public void NextLvl()
+    {
+        Menu.instance.lvl++;
+        YandexGame.savesData.lvl = Menu.instance.lvl;
+        YandexGame.SaveProgress();
+        Ads.instance.ShowAds();
+        SceneManager.LoadScene("Game");
+    }
+    public void SkipLvl()
+    {
+        Ads.instance.ShowRewardAd(0);
+    }
+    public void Reward(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                NextLvl();
+                break;
         }
     }
 }

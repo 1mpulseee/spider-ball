@@ -27,4 +27,8 @@ public class Ads : MonoBehaviour
             yg._FullscreenShow();
         }
     }
+    public void ShowRewardAd(int id)
+    {
+        yg._RewardedShow(id);
+    }
 }
