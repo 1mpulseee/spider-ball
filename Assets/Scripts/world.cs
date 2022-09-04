@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using YG;
 public class world : MonoBehaviour
 {
+    public SpriteRenderer bg;
     public static world instance;
     private void Awake()
     {
@@ -62,6 +63,8 @@ public class world : MonoBehaviour
         Finish = GameObject.FindGameObjectWithTag("Finish").transform.position;
         LastChunk.transform.SetParent(transform);
         AddTargets(LastChunk.GetComponent<Chunk>().targets);
+
+        bg.size = new Vector2(((Finish.x / bg.transform.localScale.x) * 2) + 2, bg.size.y);
     }
     public void AddTargets(Rigidbody2D[] tg)
     {

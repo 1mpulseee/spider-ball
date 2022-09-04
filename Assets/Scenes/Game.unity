@@ -346,7 +346,7 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 2
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -361,8 +361,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1526975108}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.043, y: 0.0784, z: 0}
-  m_LocalScale: {x: 2.463976, y: 2.254665, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 35, y: 35, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -462,6 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7984a184382584943abda0c51cb29347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bg: {fileID: 1526975109}
   Spawns:
   - {fileID: 1709296272586194949, guid: f2bc391c8cad7904981184a59a9a3f69, type: 3}
   - {fileID: 90270690516910466, guid: f057f83c43e4cd8458a08ddfd86b069f, type: 3}
