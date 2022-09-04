@@ -85,6 +85,7 @@ public class world : MonoBehaviour
             Menu.instance.lvl++;
             YandexGame.savesData.lvl = Menu.instance.lvl;
             YandexGame.SaveProgress();
+            Ads.instance.ShowAds();
             SceneManager.LoadScene("Game");
         }
     }
