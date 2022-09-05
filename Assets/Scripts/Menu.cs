@@ -57,6 +57,48 @@ public class Menu : MonoBehaviour
         //как фон добавить, чтобы он ни с чем не конфликтовал и ничего не перекрывал(а то верёвку он перекрывает если просто как объект добавить), не знаю
         //смена картинки в настройках
 
-
+    }
+    [SerializeField] List<GameObject> Close;
+    [SerializeField] List<GameObject> Open;
+     public void ColorChange(string color, int number)
+    {
+        for (int i = 0; i < Open.Count; i++)
+        {
+            Open[i].SetActive(false);
+        }
+        Close[number].SetActive(false);
+        Open[number].SetActive(true);
+        if (color == "red")
+        {
+            GetComponent<move>().lineRenderer.material.color = Color.red;
+        }
+        if (color == "yellow")
+        {
+            GetComponent<move>().lineRenderer.material.color = Color.yellow;
+        }
+        if (color == "green")
+        {
+            GetComponent<move>().lineRenderer.material.color = Color.green;
+        }
+        if (color == "black")
+        {
+            GetComponent<move>().lineRenderer.material.color = Color.black;
+        }
+        if (color == "purpule")
+        {
+            GetComponent<move>().lineRenderer.material.color = Color.magenta;
+        }
+        if (color == "orange")
+        {
+            GetComponent<move>().lineRenderer.material.color = new Color(255, 174, 2, 255);
+        }
+        if (color == "pink0")
+        {
+            GetComponent<move>().lineRenderer.material.color = new Color(255, 48, 209, 255);
+        }
+        if (color == "pink1")
+        {
+            GetComponent<move>().lineRenderer.material.color = new Color(255, 154, 255, 255);
+        }
     }
 }

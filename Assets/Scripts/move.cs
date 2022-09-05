@@ -5,7 +5,7 @@ public class move : MonoBehaviour
     private Rigidbody2D target;
     private Rigidbody2D rb;
     private DistanceJoint2D DistanceJoint;
-    private LineRenderer lineRenderer;
+    public LineRenderer lineRenderer;
     private bool IsConnected = false;
     [HideInInspector] public bool IsHook = false;
     private IEnumerator _Connect;
@@ -15,6 +15,7 @@ public class move : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         DistanceJoint = GetComponent<DistanceJoint2D>();
         lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.material.color = Color.black;
     }
     void Update()
     {
