@@ -60,8 +60,11 @@ public class Menu : MonoBehaviour
     }
     [SerializeField] List<GameObject> Close;
     [SerializeField] List<GameObject> Open;
-     public void ColorChange(string color, int number)
+     public void ColorChange(string Value)
     {
+        string[] data = Value.Split(' ');
+        string color = data[0];
+        int number = int.Parse(data[1]);
         for (int i = 0; i < Open.Count; i++)
         {
             Open[i].SetActive(false);
