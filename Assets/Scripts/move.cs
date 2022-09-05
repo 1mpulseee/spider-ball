@@ -15,7 +15,7 @@ public class move : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         DistanceJoint = GetComponent<DistanceJoint2D>();
         lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.material.color = Color.black;
+        
     }
     void Update()
     {

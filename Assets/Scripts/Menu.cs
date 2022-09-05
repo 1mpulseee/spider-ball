@@ -60,10 +60,11 @@ public class Menu : MonoBehaviour
     }
     [SerializeField] List<GameObject> Close;
     [SerializeField] List<GameObject> Open;
+    public string color;
      public void ColorChange(string Value)
     {
         string[] data = Value.Split(' ');
-        string color = data[0];
+        color = data[0];
         int number = int.Parse(data[1]);
         for (int i = 0; i < Open.Count; i++)
         {
@@ -71,6 +72,7 @@ public class Menu : MonoBehaviour
         }
         Close[number].SetActive(false);
         Open[number].SetActive(true);
+
         if (color == "red")
         {
             GetComponent<move>().lineRenderer.material.color = Color.red;
@@ -103,5 +105,6 @@ public class Menu : MonoBehaviour
         {
             GetComponent<move>().lineRenderer.material.color = new Color(255, 154, 255, 255);
         }
+
     }
 }
