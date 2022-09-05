@@ -15,5 +15,7 @@ namespace YG
         public bool[] openLevels = new bool[3];
 
         public int lvl = 1;
+        public bool[] IsOpen = new bool[8];
+        public int Color = 0;
     }
 }

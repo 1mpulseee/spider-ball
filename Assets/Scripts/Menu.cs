@@ -21,6 +21,10 @@ public class Menu : MonoBehaviour
         }
         SceneObjs[0].SetActive(true);
         YandexGame.GetDataEvent += Load;
+        if (YandexGame.SDKEnabled)
+        {
+            Load();
+        }
     }
     public int lvl;
     public GameObject[] SceneObjs;
@@ -46,6 +50,48 @@ public class Menu : MonoBehaviour
         lvl = YandexGame.savesData.lvl;
         leaderboardYG.NewScore(lvl);
         leaderboardYG.UpdateLB();
+
+        for (int i = 0; i < YandexGame.savesData.IsOpen.Length; i++)
+        {
+            if (YandexGame.savesData.IsOpen[i] == true)
+            {
+                Close[i].SetActive(false);
+            }
+        }
+        Open[YandexGame.savesData.Color].SetActive(true);
+
+        if (YandexGame.savesData.Color == 0)
+        {
+            _color = Color.black;
+        }
+        if (YandexGame.savesData.Color == 1)
+        {
+            _color = new Color(255, 24, 0, 255);
+        }
+        if (YandexGame.savesData.Color == 2)
+        {
+            _color = new Color(255, 110, 0, 255);
+        }
+        if (YandexGame.savesData.Color == 3)
+        {
+            _color = new Color(255, 251, 1, 255);
+        }
+        if (YandexGame.savesData.Color == 4)
+        {
+            _color = new Color(16, 255, 1, 255);
+        }
+        if (YandexGame.savesData.Color == 5)
+        {
+            _color = new Color(166, 0, 255, 255);
+        }
+        if (YandexGame.savesData.Color == 6)
+        {
+            _color = new Color(255, 48, 209, 255);
+        }
+        if (YandexGame.savesData.Color == 7)
+        {
+            _color = new Color(255, 154, 255, 255);
+        }
     }
 
     [SerializeField] List<GameObject> Wallpaper;
@@ -73,6 +119,9 @@ public class Menu : MonoBehaviour
         Close[number].SetActive(false);
         Open[number].SetActive(true);
 
+        YandexGame.savesData.Color = number;
+        YandexGame.savesData.IsOpen[number] = true;
+
         if (color == "red")
         {
             _color = new Color(255, 24, 0, 255);
@@ -80,7 +129,6 @@ public class Menu : MonoBehaviour
         if (color == "yellow")
         {
             _color = new Color(255, 251, 1, 255);
-            //yes
         }
         if (color == "green")
         {
@@ -90,7 +138,7 @@ public class Menu : MonoBehaviour
         {
             _color = Color.black;
         }
-        if (color == "purpule")
+        if (color == "purple")
         {
             _color = new Color(166, 0, 255, 255);
         }
