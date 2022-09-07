@@ -107,53 +107,57 @@ public class Menu : MonoBehaviour
     [SerializeField] List<GameObject> Close;
     [SerializeField] List<GameObject> Open;
     public Color _color;
-     public void ColorChange(string Value)
+     public void ColorChange(int number)
     {
-        string[] data = Value.Split(' ');
-        string color = data[0];
-        int number = int.Parse(data[1]);
+        Ads.instance.ShowRewardAd(number);
+    }
+    private void OnEnable() => YandexGame.CloseVideoEvent += Reward;
+    private void OnDisable() => YandexGame.CloseVideoEvent -= Reward;
+    public void Reward(int id)
+    {
         for (int i = 0; i < Open.Count; i++)
         {
             Open[i].SetActive(false);
         }
-        Close[number].SetActive(false);
-        Open[number].SetActive(true);
+        Close[id].SetActive(false);
+        Open[id].SetActive(true);
 
-        YandexGame.savesData.Color = number;
-        YandexGame.savesData.IsOpen[number] = true;
+        YandexGame.savesData.Color = id;
+        YandexGame.savesData.IsOpen[id] = true;
 
-        if (color == "red")
-        {
-            _color = new Color(255, 24, 0, 255);
-        }
-        if (color == "yellow")
-        {
-            _color = new Color(255, 251, 1, 255);
-        }
-        if (color == "green")
-        {
-            _color = new Color(16, 255, 1, 255);
-        }
-        if (color == "black")
+        YandexGame.SaveProgress();
+
+        if (YandexGame.savesData.Color == 0)
         {
             _color = Color.black;
         }
-        if (color == "purple")
+        if (YandexGame.savesData.Color == 1)
         {
-            _color = new Color(166, 0, 255, 255);
+            _color = new Color(255, 24, 0, 255);
         }
-        if (color == "orange")
+        if (YandexGame.savesData.Color == 2)
         {
             _color = new Color(255, 110, 0, 255);
         }
-        if (color == "pink0")
+        if (YandexGame.savesData.Color == 3)
+        {
+            _color = new Color(255, 251, 1, 255);
+        }
+        if (YandexGame.savesData.Color == 4)
+        {
+            _color = new Color(16, 255, 1, 255);
+        }
+        if (YandexGame.savesData.Color == 5)
+        {
+            _color = new Color(166, 0, 255, 255);
+        }
+        if (YandexGame.savesData.Color == 6)
         {
             _color = new Color(255, 48, 209, 255);
         }
-        if (color == "pink1")
+        if (YandexGame.savesData.Color == 7)
         {
             _color = new Color(255, 154, 255, 255);
         }
-        YandexGame.SaveProgress();
     }
 }
