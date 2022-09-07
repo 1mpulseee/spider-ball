@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 public class move : MonoBehaviour
 {
+    public Transform c_target;
     private Rigidbody2D target;
     private Rigidbody2D rb;
     private DistanceJoint2D DistanceJoint;
@@ -17,6 +18,7 @@ public class move : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.material.color = Menu.instance._color / 255;
         lineRenderer.material.SetColor("_EmissionColor", Menu.instance._color / 255);
+        c_target.transform.parent = null;
     }
     void Update()
     {
@@ -45,6 +47,19 @@ public class move : MonoBehaviour
             StopCoroutine(_Connect);
             _Connect = null;
             DistanceJoint.enabled = false;
+        }
+    }
+    private void FixedUpdate()
+    {
+        if (IsHook)
+        {
+            c_target.gameObject.SetActive(false);
+        }
+        else
+        {
+            c_target.gameObject.SetActive(true);
+            target = world.instance.GetTarget(transform.position);
+            c_target.position = target.gameObject.transform.position;
         }
     }
     public IEnumerator Connect()
