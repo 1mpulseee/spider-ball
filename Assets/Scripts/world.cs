@@ -132,4 +132,8 @@ public class world : MonoBehaviour
         else
             Time.timeScale = 1f;
     }
+    public void OpenMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 }

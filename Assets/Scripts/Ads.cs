@@ -31,4 +31,32 @@ public class Ads : MonoBehaviour
     {
         yg._RewardedShow(id);
     }
+    public void Pause(bool value)
+    {
+        if (world.instance != null)
+        {
+            if (!world.instance.Pause.activeSelf)
+            {
+                if (value)
+                {
+                    Time.timeScale = 0f;
+                }
+                else
+                {
+                    Time.timeScale = 1f;
+                }
+            }
+        }
+        else
+        {
+            if (value)
+            {
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+            }
+        }    
+    }
 }
