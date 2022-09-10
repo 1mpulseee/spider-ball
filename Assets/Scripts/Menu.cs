@@ -160,4 +160,8 @@ public class Menu : MonoBehaviour
             _color = new Color(255, 154, 255, 255);
         }
     }
+    public void OpenDiscord()
+    {
+        Application.OpenURL("https://discord.gg/TWW3cCzvk4");
+    }
 }
