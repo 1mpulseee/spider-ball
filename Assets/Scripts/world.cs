@@ -35,11 +35,16 @@ public class world : MonoBehaviour
     private Transform player;
     private GameObject LastChunk;
     public Text LvlText;
+    public GameObject helpText;
     private void Start()
     {
         LvlText.text = Menu.instance.lvl.ToString();
         ChunkCount = 6;
         float C_L = Menu.instance.lvl;
+        if (C_L < 5)
+        {
+            helpText.SetActive(true);
+        }
         while (C_L > 1)
         {
             ChunkCount++;
