@@ -36,14 +36,20 @@ public class world : MonoBehaviour
     private GameObject LastChunk;
     public Text LvlText;
     public GameObject helpText;
+    public SpriteRenderer LvlRenderer;
     private void Start()
     {
+        LvlRenderer.sprite = Menu.instance.Wallpapers[YandexGame.savesData.Wallpaper];
         LvlText.text = Menu.instance.lvl.ToString();
         ChunkCount = 6;
         float C_L = Menu.instance.lvl;
         if (C_L < 5)
         {
             helpText.SetActive(true);
+        }
+        else
+        {
+            helpText.SetActive(false);
         }
         while (C_L > 1)
         {

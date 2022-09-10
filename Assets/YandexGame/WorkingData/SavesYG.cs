@@ -18,5 +18,6 @@ namespace YG
         public bool[] IsOpen = new bool[8];
         public int Color = 0;
         public float Volume = .5f;
+        public int Wallpaper = 0;
     }
 }

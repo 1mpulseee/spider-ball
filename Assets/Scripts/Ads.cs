@@ -33,30 +33,19 @@ public class Ads : MonoBehaviour
     }
     public void Pause(bool value)
     {
-        if (world.instance != null)
+        if (world.instance != null && !world.instance.Pause.activeSelf)
         {
-            if (!world.instance.Pause.activeSelf)
-            {
-                if (value)
-                {
-                    Time.timeScale = 0f;
-                }
-                else
-                {
-                    Time.timeScale = 1f;
-                }
-            }
+            if (value)
+                Time.timeScale = 0f;
+            else
+                Time.timeScale = 1f;
         }
         else
         {
             if (value)
-            {
                 Time.timeScale = 0f;
-            }
             else
-            {
                 Time.timeScale = 1f;
-            }
-        }    
+        }
     }
 }
