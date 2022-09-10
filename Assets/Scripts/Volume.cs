@@ -34,4 +34,11 @@ public class Volume : MonoBehaviour
         AudioSource.enabled = true;
         AudioSource.volume = YandexGame.savesData.Volume;
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
+            AudioSource.Play();
+        }
+    }
 }
