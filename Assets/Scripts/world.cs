@@ -67,6 +67,9 @@ public class world : MonoBehaviour
         AddTargets(LastChunk.GetComponent<Chunk>().targets);
 
         bg.size = new Vector2(((Finish.x / bg.transform.localScale.x) * 2) + 2, bg.size.y);
+
+        Pause.SetActive(false);
+        PauseBtn.SetActive(true);
     }
     public void AddTargets(Rigidbody2D[] tg)
     {
@@ -111,6 +114,22 @@ public class world : MonoBehaviour
                 break;
         }
     }
-
-    
+    public GameObject Pause;
+    public GameObject PauseBtn;
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SetPause(!Pause.activeSelf);
+        }
+    }
+    public void SetPause(bool State)
+    {
+        Pause.SetActive(State);
+        PauseBtn.SetActive(!State);
+        if (State)
+            Time.timeScale = 0f;
+        else
+            Time.timeScale = 1f;
+    }
 }

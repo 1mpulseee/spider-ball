@@ -11,7 +11,6 @@ public class move : MonoBehaviour
     [HideInInspector] public bool IsHook = false;
     private IEnumerator _Connect;
     public int force;
-    [SerializeField] canvas canvas;
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -41,12 +40,6 @@ public class move : MonoBehaviour
                 StartCoroutine(_Connect);
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            canvas.pauseOFForON();
-        }
-
-
         else if (IsConnected)
         {
             IsConnected = false;
