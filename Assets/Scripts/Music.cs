@@ -6,14 +6,16 @@ using UnityEngine.UI;
 public class Music : MonoBehaviour
 {
     public Slider slider;
-    public static Music instance;
     private void Awake()
     {
-        instance = this;
         YandexGame.GetDataEvent += Load;
+        if (YandexGame.SDKEnabled)
+        {
+            Load();
+        }
     }
-    public Action _Volume;
-    public Action _Load;
+    public static Action _Volume;
+    public static Action _Load;
     public IEnumerator Edit()
     {
         YandexGame.savesData.Volume = slider.value;

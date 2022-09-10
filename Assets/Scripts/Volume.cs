@@ -17,13 +17,13 @@ public class Volume : MonoBehaviour
     }
     private void OnEnable()
     {
-        Music.instance._Volume += ChangeVolume;
-        Music.instance._Load += Load;
+        Music._Volume += ChangeVolume;
+        Music._Load += Load;
     }
     private void OnDisable()
     {
-        Music.instance._Volume -= ChangeVolume;
-        Music.instance._Load -= Load;
+        Music._Volume -= ChangeVolume;
+        Music._Load -= Load;
     }
     public void ChangeVolume()
     {
