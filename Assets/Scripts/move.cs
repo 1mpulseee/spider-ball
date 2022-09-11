@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using YG;
 public class move : MonoBehaviour
 {
     public Transform c_target;
@@ -33,7 +34,7 @@ public class move : MonoBehaviour
             lineRenderer.SetPosition(0, Vector3.zero);
             lineRenderer.SetPosition(1, Vector3.zero);
         }
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.E) || ((YandexGame.EnvironmentData.isMobile || YandexGame.EnvironmentData.isTablet) && Input.touchCount > 0))
         {
             if (_Connect == null && !IsConnected)
             {

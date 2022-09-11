@@ -11,21 +11,31 @@ public class NewBehaviourScript : MonoBehaviour
         text = GetComponent<Text>();
         Size = text.fontSize;
         rectTransform = GetComponent<RectTransform>();
-        text.resizeTextForBestFit = true;
         StartCoroutine("Fix");
     }
     public IEnumerator Fix()
     {
+        text.resizeTextForBestFit = true;
         while (text.cachedTextGenerator.fontSizeUsedForBestFit > Size)
         {
             rectTransform.sizeDelta = rectTransform.sizeDelta - new Vector2(0, 10);
-            yield return new WaitForSeconds(.01f);
+            yield return new WaitForEndOfFrame();
         }
         while (text.cachedTextGenerator.fontSizeUsedForBestFit < Size)
         {
             rectTransform.sizeDelta = rectTransform.sizeDelta + new Vector2(0, 10);
-            yield return new WaitForSeconds(.01f);
+            yield return new WaitForEndOfFrame();
         }
-        text.resizeTextForBestFit = false;
+        yield return new WaitForSeconds(.1f);
+        while (text.cachedTextGenerator.fontSizeUsedForBestFit > Size)
+        {
+            rectTransform.sizeDelta = rectTransform.sizeDelta - new Vector2(0, 10);
+            yield return new WaitForEndOfFrame();
+        }
+        while (text.cachedTextGenerator.fontSizeUsedForBestFit < Size)
+        {
+            rectTransform.sizeDelta = rectTransform.sizeDelta + new Vector2(0, 10);
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

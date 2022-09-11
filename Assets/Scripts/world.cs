@@ -35,7 +35,8 @@ public class world : MonoBehaviour
     private Transform player;
     private GameObject LastChunk;
     public Text LvlText;
-    public GameObject helpText;
+    public GameObject D_HelpText;
+    public GameObject M_HelpText;
     public SpriteRenderer LvlRenderer;
     private void Start()
     {
@@ -45,11 +46,21 @@ public class world : MonoBehaviour
         float C_L = Menu.instance.lvl;
         if (C_L < 5)
         {
-            helpText.SetActive(true);
+            if (YandexGame.EnvironmentData.isMobile || YandexGame.EnvironmentData.isTablet)
+            {
+                D_HelpText.SetActive(false);
+                M_HelpText.SetActive(true);
+            }
+            else
+            {
+                D_HelpText.SetActive(true);
+                M_HelpText.SetActive(false);
+            }
         }
         else
         {
-            helpText.SetActive(false);
+            D_HelpText.SetActive(false);
+            M_HelpText.SetActive(false);
         }
         while (C_L > 1)
         {
