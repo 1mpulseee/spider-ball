@@ -12,6 +12,10 @@ public class Ads : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             yg = gameObject.GetComponent<YandexGame>();
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     private float time;
     public int AdsDelay = 150;
