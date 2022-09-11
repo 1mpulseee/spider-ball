@@ -17,6 +17,7 @@ public class move : MonoBehaviour
         DistanceJoint = GetComponent<DistanceJoint2D>();
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.material.color = Menu.instance._color / 255;
+        lineRenderer.material.color += new Color(0, 0, 0, 255);
         lineRenderer.material.SetColor("_EmissionColor", Menu.instance._color / 255);
         c_target.transform.parent = null;
     }

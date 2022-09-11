@@ -242,7 +242,6 @@ MonoBehaviour:
   c_target: {fileID: 4587676867115219728}
   IsHook: 0
   force: 10
-  canvas: {fileID: 5476691310356433663, guid: 17bae6260f7130c4dbf3600807d3a22f, type: 3}
 --- !u!120 &7423097810249928260
 LineRenderer:
   m_ObjectHideFlags: 0

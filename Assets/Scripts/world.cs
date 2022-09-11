@@ -40,7 +40,7 @@ public class world : MonoBehaviour
     private void Start()
     {
         LvlRenderer.sprite = Menu.instance.Wallpapers[YandexGame.savesData.Wallpaper];
-        LvlText.text = Menu.instance.lvl.ToString();
+        LvlText.text = "Lvl " + Menu.instance.lvl.ToString();
         ChunkCount = 6;
         float C_L = Menu.instance.lvl;
         if (C_L < 5)
@@ -145,6 +145,9 @@ public class world : MonoBehaviour
     }
     public void OpenMenu()
     {
+        Time.timeScale = 1f;
+        Pause.SetActive(false);
+        PauseBtn.SetActive(true);
         SceneManager.LoadScene("Menu");
     }
 }

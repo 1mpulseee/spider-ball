@@ -65,7 +65,7 @@ public class Menu : MonoBehaviour
 
         if (YandexGame.savesData.Color == 0)
         {
-            _color = Color.black;
+            _color = new Color(0, 0, 0, 255);
         }
         if (YandexGame.savesData.Color == 1)
         {
@@ -109,7 +109,10 @@ public class Menu : MonoBehaviour
     public Color _color;
      public void ColorChange(int number)
     {
-        Ads.instance.ShowRewardAd(number);
+        if (YandexGame.savesData.IsOpen[number] == false)
+            Ads.instance.ShowRewardAd(number);
+        else
+            Reward(number);
     }
     private void OnEnable() => YandexGame.CloseVideoEvent += Reward;
     private void OnDisable() => YandexGame.CloseVideoEvent -= Reward;
