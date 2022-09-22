@@ -9,12 +9,13 @@ public class NewBehaviourScript : MonoBehaviour
     void Start()
     {
         text = GetComponent<Text>();
-        Size = text.fontSize;
         rectTransform = GetComponent<RectTransform>();
         StartCoroutine("Fix");
     }
     public IEnumerator Fix()
     {
+        yield return new WaitForSeconds(.25f);
+        Size = text.fontSize;
         text.resizeTextForBestFit = true;
         while (text.cachedTextGenerator.fontSizeUsedForBestFit > Size)
         {
