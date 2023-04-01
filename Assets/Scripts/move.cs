@@ -74,5 +74,4 @@ public class move : MonoBehaviour
         DistanceJoint.enabled = true;
         IsConnected = true;
     }
-    
 }

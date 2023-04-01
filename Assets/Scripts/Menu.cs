@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using YG;
+using System;
+using TMPro;
+
 public class Menu : MonoBehaviour
 {
     public LeaderboardYG leaderboardYG;
@@ -28,6 +31,18 @@ public class Menu : MonoBehaviour
         }
     }
     public int lvl;
+    public bool premium;
+    [HideInInspector] public int Money
+    {
+        get { return _Money; }
+        set 
+        {
+            _Money = value;
+            MoneyText.text = value.ToString();
+        }
+    }
+    private int _Money;
+    public TMP_Text MoneyText;
     public GameObject[] SceneObjs;
     public void Change(int id)
     {
@@ -44,136 +59,35 @@ public class Menu : MonoBehaviour
     }
     public void Play()
     {
-        SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+        SceneManager.LoadScene(1);
     }
     public void Load()
     {
-        Wallpaper.sprite = Wallpapers[YandexGame.savesData.Wallpaper];
-
         lvl = YandexGame.savesData.lvl;
+        Money = YandexGame.savesData.Money;
+        premium = YandexGame.savesData.premium;
         leaderboardYG.NewScore(lvl);
         leaderboardYG.UpdateLB();
-
-        for (int i = 0; i < YandexGame.savesData.IsOpen.Length; i++)
-        {
-            if (YandexGame.savesData.IsOpen[i] == true)
-            {
-                Close[i].SetActive(false);
-            }
-        }
-        Open[YandexGame.savesData.Color].SetActive(true);
-
-        if (YandexGame.savesData.Color == 0)
-        {
-            _color = new Color(0, 0, 0, 255);
-        }
-        if (YandexGame.savesData.Color == 1)
-        {
-            _color = new Color(255, 24, 0, 255);
-        }
-        if (YandexGame.savesData.Color == 2)
-        {
-            _color = new Color(255, 110, 0, 255);
-        }
-        if (YandexGame.savesData.Color == 3)
-        {
-            _color = new Color(255, 251, 1, 255);
-        }
-        if (YandexGame.savesData.Color == 4)
-        {
-            _color = new Color(16, 255, 1, 255);
-        }
-        if (YandexGame.savesData.Color == 5)
-        {
-            _color = new Color(166, 0, 255, 255);
-        }
-        if (YandexGame.savesData.Color == 6)
-        {
-            _color = new Color(255, 48, 209, 255);
-        }
-        if (YandexGame.savesData.Color == 7)
-        {
-            _color = new Color(255, 154, 255, 255);
-        }
+        AudioListener.volume = YandexGame.savesData.Volume;
     }
-
     public List<Sprite> Wallpapers;
-    public Image Wallpaper;
-    public void ChangeWallpaper()
-    {
-        Ads.instance.ShowRewardAd(777);
-
-    }
-    [SerializeField] List<GameObject> Close;
-    [SerializeField] List<GameObject> Open;
     public Color _color;
-     public void ColorChange(int number)
+    public bool Buy(int price)
     {
-        if (YandexGame.savesData.IsOpen[number] == false)
-            Ads.instance.ShowRewardAd(number);
+        if (Money > price)
+        {
+            Money -= price;
+            return true;
+        }
         else
-            Reward(number);
+        {
+            return false;
+        }
     }
-    private void OnEnable() => YandexGame.CloseVideoEvent += Reward;
-    private void OnDisable() => YandexGame.CloseVideoEvent -= Reward;
-    public void Reward(int id)
+    public void AddMoney(int Count)
     {
-        if (id == 777)
-        {
-            YandexGame.savesData.Wallpaper++;
-            YandexGame.savesData.Wallpaper = YandexGame.savesData.Wallpaper % Wallpapers.Count;
-            Wallpaper.sprite = Wallpapers[YandexGame.savesData.Wallpaper];
-            YandexGame.SaveProgress();
-            return;
-        }
-
-        for (int i = 0; i < Open.Count; i++)
-        {
-            Open[i].SetActive(false);
-        }
-        Close[id].SetActive(false);
-        Open[id].SetActive(true);
-
-        YandexGame.savesData.Color = id;
-        YandexGame.savesData.IsOpen[id] = true;
-
+        Money += Count;
+        YandexGame.savesData.Money = Money;
         YandexGame.SaveProgress();
-
-        if (YandexGame.savesData.Color == 0)
-        {
-            _color = Color.black;
-        }
-        if (YandexGame.savesData.Color == 1)
-        {
-            _color = new Color(255, 24, 0, 255);
-        }
-        if (YandexGame.savesData.Color == 2)
-        {
-            _color = new Color(255, 110, 0, 255);
-        }
-        if (YandexGame.savesData.Color == 3)
-        {
-            _color = new Color(255, 251, 1, 255);
-        }
-        if (YandexGame.savesData.Color == 4)
-        {
-            _color = new Color(16, 255, 1, 255);
-        }
-        if (YandexGame.savesData.Color == 5)
-        {
-            _color = new Color(166, 0, 255, 255);
-        }
-        if (YandexGame.savesData.Color == 6)
-        {
-            _color = new Color(255, 48, 209, 255);
-        }
-        if (YandexGame.savesData.Color == 7)
-        {
-            _color = new Color(255, 154, 255, 255);
-        }
-    }
-    public void OpenDiscord()
-    {
-        Application.OpenURL("https://discord.gg/TWW3cCzvk4");
     }
 }

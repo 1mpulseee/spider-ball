@@ -1,44 +1,43 @@
 using UnityEngine;
+using UnityEngine.UI;
 using YG;
-public class Volume : MonoBehaviour
+public class volume : MonoBehaviour
 {
-    private AudioSource AudioSource;
-    private void Start()
+    private Image Sound;
+    public Sprite active;
+    public Sprite disabled;
+    private void Awake()
     {
-        AudioSource = GetComponent<AudioSource>();
-        if (YandexGame.SDKEnabled)
-        {
-            Load();
-        }
-        else
-        {
-            AudioSource.enabled = false;
-        }
+        Sound = GetComponent<Image>();
     }
     private void OnEnable()
     {
-        Music._Volume += ChangeVolume;
-        Music._Load += Load;
+        if (YandexGame.SDKEnabled)
+            LoadVolume();
+        else
+            YandexGame.GetDataEvent += LoadVolume; 
     }
-    private void OnDisable()
-    {
-        Music._Volume -= ChangeVolume;
-        Music._Load -= Load;
-    }
+    private void OnDisable() => YandexGame.GetDataEvent -= LoadVolume;
     public void ChangeVolume()
     {
-        AudioSource.volume = YandexGame.savesData.Volume;
-    }
-    public void Load()
-    {
-        AudioSource.enabled = true;
-        AudioSource.volume = YandexGame.savesData.Volume;
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.transform.tag == "Player")
+        if (YandexGame.savesData.Volume == 0)
         {
-            AudioSource.Play();
+            YandexGame.savesData.Volume = 1;
+            Sound.sprite = active;
         }
+        else
+        {
+            YandexGame.savesData.Volume = 0;
+            Sound.sprite = disabled;
+        }
+        AudioListener.volume = YandexGame.savesData.Volume;
+        YandexGame.SaveProgress();
+    }
+    public void LoadVolume()
+    {
+        if (YandexGame.savesData.Volume == 0)
+            Sound.sprite = disabled;
+        else
+            Sound.sprite = active;
     }
 }

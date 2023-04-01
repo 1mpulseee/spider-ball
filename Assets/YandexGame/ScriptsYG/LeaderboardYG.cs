@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityToolbag;
-
+using TMPro;
 namespace YG
 {
     public class LeaderboardYG : MonoBehaviour
@@ -9,45 +10,57 @@ namespace YG
         [Tooltip("Техническое название соревновательной таблицы")]
         public string nameLB;
         [Tooltip("Максимальное кол-во получаемых игроков")]
-        public int maxQuantityPlayers = 50;
+        public int maxQuantityPlayers = 20;
         [Tooltip("Кол-во получения верхних топ игроков")]
-        [Range(0, 10000)]
+        [Range(0, 10)]
         public int quantityTop = 3;
         [Tooltip("Кол-во получаемых записей возле пользователя")]
         [Range(0, 20)]
         public int quantityAround = 3;
+        public enum UpdateLBMethod { Start, OnEnable, DoNotUpdate };
+        [Tooltip(@"Когда следует обновлять лидерборд?\nStart - Обновлять в методе Start.\nOnEnable - Обновлять при каждой активации объекта (в методе OnEnable)\nDoNotUpdate - Не обновлять лидерборд с помощью данного скрипта (подразоумивается, что метод обновления ""UpdateLB"" вы будете запускать сами, когда вам потребуется.")]
+        public UpdateLBMethod updateLBMethod = UpdateLBMethod.OnEnable;
         [Tooltip("Перетащите компонент Text для записи описания таблицы, если вы не выбрали продвинутую таблицу (advanced)")]
-        public Text entriesText;
-        [Tooltip("Продвинутая таблица. Поддерживает подгрузку авата и конвертацию рекордов в тип Time")]
+        public TMP_Text entriesText;
+        [Tooltip("Продвинутая таблица. Поддерживает подгрузку авата и конвертацию рекордов в тип Time. Подгружает все данные в отдельные элементы интерфейса.")]
         public bool advanced;
-        public enum PlayerPhotoSize { nonePhoto, small, medium, large };
-        [Tooltip("Размер подгружаемых изображений игроков. nonePhoto = не подгружать изображение")]
+        public enum PlayerPhoto { NonePhoto, Small, Medium, Large };
+        [Tooltip("Размер подгружаемых изображений игроков. NonePhoto = не подгружать изображение")]
         [ConditionallyVisible(nameof(advanced))]
-        public bool loadAvatars = true;
-        [ConditionallyVisible(nameof(advanced))]
-        public PlayerPhotoSize playerPhotoSize;
+        public PlayerPhoto playerPhoto = PlayerPhoto.Small;
         [Tooltip("Конвертация полученных рекордов в Time тип")]
         [ConditionallyVisible(nameof(advanced))]
         public bool timeTypeConvert;
+        [ConditionallyVisible("timeTypeConvert"), Range(0, 3), Tooltip("Сколько показывать сотых (цифр после запятой)? (при использовании Time type)\n  Например:\n  0 = 00:00\n  1 = 00:00.0\n  2 = 00:00.00\n  3 = 00:00.000\nВы можете проверить это в Unity не прибегая к тестированию в WebGL!")]
+        public int decimalSize = 1;
 
         string photoSize;
 
         void Start()
         {
-            if (playerPhotoSize == PlayerPhotoSize.nonePhoto)
+            if (playerPhoto == PlayerPhoto.NonePhoto)
                 photoSize = "nonePhoto";
-            if (playerPhotoSize == PlayerPhotoSize.small)
+            if (playerPhoto == PlayerPhoto.Small)
                 photoSize = "small";
-            else if (playerPhotoSize == PlayerPhotoSize.medium)
+            else if (playerPhoto == PlayerPhoto.Medium)
                 photoSize = "medium";
-            else if (playerPhotoSize == PlayerPhotoSize.large)
+            else if (playerPhoto == PlayerPhoto.Large)
                 photoSize = "large";
 
-            if(YandexGame.initializedLB) 
+            if (updateLBMethod == UpdateLBMethod.Start
+                && YandexGame.initializedLB)
                 UpdateLB();
         }
 
-        private void OnEnable() => YandexGame.UpdateLbEvent += OnUpdateLB;
+        private void OnEnable()
+        {
+            YandexGame.UpdateLbEvent += OnUpdateLB;
+
+            if (updateLBMethod == UpdateLBMethod.OnEnable
+                && YandexGame.initializedLB)
+                UpdateLB();
+        }
+
         private void OnDisable() => YandexGame.UpdateLbEvent -= OnUpdateLB;
 
         void OnUpdateLB(string _name, string entriesLB, int[] rank, string[] photo, string[] playersName, int[] scorePlayers, bool auth)
@@ -107,10 +120,29 @@ namespace YG
                             if (!timeTypeConvert)
                                 sampleContainer.transform.Find("Score").GetComponentInChildren<Text>().text = scorePlayers[i].ToString();
 
-                            else 
-                                sampleContainer.transform.Find("Score").GetComponentInChildren<Text>().text = scorePlayers[i].ToString("D4").Insert(2, ":");
+                            else
+                            {
+                                string res = scorePlayers[i].ToString();
+                                string milSec = decimalSize == 0 ? "" : "." + res.Remove(0, res.Length - decimalSize);
 
-                            if (loadAvatars && photo[i] != "nonePhoto")
+                                int secReal = int.Parse(res.Remove(res.Length - 3));
+                                int min = (int)(secReal / 60.0f);
+                                int sec = (int)secReal - min * 60;
+
+                                string minStr;
+                                if (min.ToString().Length == 1) minStr = "0" + min.ToString();
+                                else minStr = min.ToString();
+
+                                string secStr;
+                                if (sec.ToString().Length == 1) secStr = "0" + sec.ToString();
+                                else secStr = sec.ToString();
+
+                                res = minStr + ":" + secStr + milSec;
+
+                                sampleContainer.transform.Find("Score").GetComponentInChildren<Text>().text = res;
+                            }
+
+                            if (playerPhoto != PlayerPhoto.NonePhoto && photo[i] != "nonePhoto")
                                 sampleContainer.transform.Find("Photo").GetComponentInChildren<ImageLoadYG>().Load(photo[i]);
                         }
                     }
@@ -123,10 +155,9 @@ namespace YG
             YandexGame.GetLeaderboard(nameLB, maxQuantityPlayers, quantityTop, quantityAround, photoSize);
         }
 
-        public void NewScore(int score)
-        {
-            YandexGame.NewLeaderboardScores(nameLB, score);
-        }
+        public void NewScore(int score) => YandexGame.NewLeaderboardScores(nameLB, score);
+
+        public void NewScoreTimeConvert(float score) => YandexGame.NewLBScoreTimeConvert(nameLB, score);
     }
 }
 

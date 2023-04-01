@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityToolbag;
 
 namespace YG
@@ -19,20 +20,30 @@ namespace YG
         [Tooltip("Вкл/Выкл лидерборды")]
         public bool leaderboardEnable;
 
-        [Tooltip("Защита от кражи игры для публикации на пиратских сайтах.")]
-        public bool siteLock = true;
+        [Tooltip(@"Вкл/Выкл облачные сохранения (сохранения Яндекса). При включении облачных сохранений, локальные сохранения всё равно будут работать. При использовании метода сохранения ""SaveProgress"", сохранения будут происходить локально - если таймер не достиг значения ""Save Cloud Interval"". Если же таймер достиг интервала - то сохранения запишутся в облако. При загрузке сохранений, будут загружены более актуальные данные (из локальных или облачных сохранений).")]
+        public bool saveCloud = true;
 
-        [Header("Ad")]
+        [ConditionallyVisible(nameof(saveCloud))]
+        [Tooltip("Flush — определяет очередность отправки данных. При значении «true» данные будут отправлены на сервер немедленно; «false» (значение по умолчанию) — запрос на отправку данных будет поставлен в очередь.")]
+        public bool flush;
 
-        [Tooltip("Защита от накруток вознаграждения при использовании рекламы за вознаграждение. Не даёт награду пользователям с AdBlock и другими аналогичными расширениями браузера. Пользователям, которые закрывают рекламу раньше времени. Предотвращает открытие нескольких рекламных блоков и соответственно получения чрезмерной награды.")]
-        public bool checkAdblock = true;
+        [ConditionallyVisible(nameof(saveCloud))]
+        [Tooltip("Интервал облачных сохранений.\nПри использовании метода сохранения (SaveProgress), сохранения будут происходить локально, если таймер не достиг значения (Save Cloud Interval. По умолчанию = 5). Если же таймер достиг интервала, то сохранения запишутся в облако.\nПри загрузке сохранений, будут загружены более актуальные данные (из локальных или облачных сохранений).")]
+        [Min(5)]
+        public int saveCloudInterval = 5;
 
-        public enum FullscreenAdChallenge { atStartupEndSwitchScene, onlyAtStartup };
-        [Tooltip("Выберите atStartupEndSwitchScene если хотите, чтобы полноэкранная реклама вызывалась при запуске игры и при переключении сцены. Выберите onlyAtStartup если хотите, чтобы реклама вызывалась только при запуске игры.")]
-        public FullscreenAdChallenge fullscreenAdChallenge;
+        [Header("Ads")]
 
-        [Tooltip("Если данный параметр выключен, то статические баннеры будут отображаться только во время загрузки игры. Если данный параметр включен, то статические баннеры будут отображаться и во время загрузки игры и в самой игре они тоже будут присутствовать!")]
-        public bool staticRBTInGame;
+        [Tooltip(" •  Автоматически показывать рекламу после загрузки сцен?\nПо умолчанию = true — это значит, что показ рекламы будет вызываться при загрузке любой сцены в игре. Значение false — реклама не будет показываться при загрузке сцен.\n\n •  Независимо от выбора данного параметра, по умолчанию первая реклама показывается еще до загрузки игры, это можно отключить:\n1. Перейдите в настройки проекта Project Settings → Player → Resolution and Presentation → WebGL Template\n2. Выберите шаблон PluginYG\n3. Найдите поле Off ads before loading game\n4. Заполните данное поле любым словом, например, запишите туда true")]
+        public bool AdWhenLoadingScene = true;
+
+        [Tooltip("Интервал запросов на вызов полноэкранной рекламы.")]
+        [Min(5)]
+        public int fullscreenAdInterval = 10;
+
+        [Tooltip("Длительность симуляции показа рекламы.")]
+        [Min(0)]
+        public float durationOfAdSimulation = 0.5f;
 
         [Header("Language Translation")]
 
@@ -48,6 +59,10 @@ namespace YG
         [Tooltip("Метод перевода. \nAutoLocalization - Автоматический перевод через интернет с помощью Google Translate \nManual - Ручной режим. Вы сами записываете перевод в компоненте LanguageYG \nCSVFile - Перевод с плмлщью Excel файла.")]
         [ConditionallyVisible(nameof(LocalizationEnable))]
         public TranslateMethod translateMethod;
+
+        [Tooltip("Домен с которого будет скачиваться перевод. Если у вас возникли проблемы с авто-переводом, попробуйте поменять домен.")]
+        [ConditionallyVisible(nameof(LocalizationEnable))]
+        public string domainAutoLocalization = "com";
 
         [System.Serializable]
         public class CSVTranslate
@@ -68,7 +83,7 @@ namespace YG
         #region LanguagesEnumeration
         [System.Serializable]
         public class Languages
-        { 
+        {
             [Tooltip("RUSSIAN")] public bool ru;
             [Tooltip("ENGLISH")] public bool en;
             [Tooltip("TURKISH")] public bool tr;
@@ -90,7 +105,7 @@ namespace YG
             [Tooltip("UZBEK")] public bool uz;
             [Tooltip("SPANISH")] public bool es;
             [Tooltip("PORTUGUESE")] public bool pt;
-            [Tooltip("ARABAIN")] public bool ar;
+            [Tooltip("ARABIAN")] public bool ar;
             [Tooltip("INDONESIAN")] public bool id;
             [Tooltip("JAPANESE")] public bool ja;
             [Tooltip("ITALIAN")] public bool it;
@@ -127,7 +142,7 @@ namespace YG
             [Tooltip("UZBEK")] public Font[] uz;
             [Tooltip("SPANISH")] public Font[] es;
             [Tooltip("PORTUGUESE")] public Font[] pt;
-            [Tooltip("ARABAIN")] public Font[] ar;
+            [Tooltip("ARABIAN")] public Font[] ar;
             [Tooltip("INDONESIAN")] public Font[] id;
             [Tooltip("JAPANESE")] public Font[] ja;
             [Tooltip("ITALIAN")] public Font[] it;
@@ -138,16 +153,61 @@ namespace YG
         [ConditionallyVisible(nameof(LocalizationEnable))]
         [Tooltip("Здесь вы можете выбрать одельные шрифты для каждого языка.")]
         public Fonts fonts;
+
+        [System.Serializable]
+        public class FontsSizeCorrect
+        {
+            [Tooltip("RUSSIAN")] public int[] ru;
+            [Tooltip("ENGLISH")] public int[] en;
+            [Tooltip("TURKISH")] public int[] tr;
+            [Tooltip("AZERBAIJANIAN")] public int[] az;
+            [Tooltip("BELARUSIAN")] public int[] be;
+            [Tooltip("HEBREW")] public int[] he;
+            [Tooltip("ARMENIAN")] public int[] hy;
+            [Tooltip("GEORGIAN")] public int[] ka;
+            [Tooltip("ESTONIAN")] public int[] et;
+            [Tooltip("FRENCH")] public int[] fr;
+            [Tooltip("KAZAKH")] public int[] kk;
+            [Tooltip("KYRGYZ")] public int[] ky;
+            [Tooltip("LITHUANIAN")] public int[] lt;
+            [Tooltip("LATVIAN")] public int[] lv;
+            [Tooltip("ROMANIAN")] public int[] ro;
+            [Tooltip("TAJICK")] public int[] tg;
+            [Tooltip("TURKMEN")] public int[] tk;
+            [Tooltip("UKRAINIAN")] public int[] uk;
+            [Tooltip("UZBEK")] public int[] uz;
+            [Tooltip("SPANISH")] public int[] es;
+            [Tooltip("PORTUGUESE")] public int[] pt;
+            [Tooltip("ARABIAN")] public int[] ar;
+            [Tooltip("INDONESIAN")] public int[] id;
+            [Tooltip("JAPANESE")] public int[] ja;
+            [Tooltip("ITALIAN")] public int[] it;
+            [Tooltip("GERMAN")] public int[] de;
+            [Tooltip("HINDI")] public int[] hi;
+        }
+
+        [ConditionallyVisible(nameof(LocalizationEnable))]
+        [Tooltip("Вы можете скорректировать размер шрифта для каждого языка. Допустим, для Японского языка вы можете указать -3. В таком случае, если бы базовый размер был бы, например, 10, то для японского языка он бы стал равен 7.")]
+        public FontsSizeCorrect fontsSizeCorrect;
         #endregion LanguagesEnumeration
 
         [Header("Other")]
 
-        [Tooltip("Для более старых версий Unity требуется задержка старта SDK (задержка в кардах в секунду).\nСтавить задержку сдедует, если при запуске игры на Web сервере, после загрузки игры происходит краш или функции SDK не работают. В таком случае, обновите Unity до актуальной версии, либо поставьте задержку (рекомедруется: 20).\nЕсли SDK умпешно загружается, задержку ставить не требуется.")]
-        [Min(0)]
-        public int SDKStartDelay;
-
         [Tooltip("Вы можете выключить запись лога в консоль.")]
         public bool debug = true;
+
+        [Tooltip("Включить автоматическую архивацию билда?\n\n •  После успешного создания билда игры, папка с содержанием билда пакуется в zip архив. При повторной сборке игры, архив не перезапишется, но создастся новый пакет с приписанным номером в названии файла.")]
+        public bool autoBuildArchiving = true;
+
+        //[Tooltip(@"Выполнять перезагрузку статическх полей? (Полезно для ECS). Рекомендуется включать параметр ""For ECS"" при ""выключение перезагрузки домена"" в настройках проекта. Это часто используют при работе с ECS-фреймворками (DOTS, LeoECS, Morpeh, etc).")]
+        //public bool forECS;
+
+        [Tooltip("Если данный параметр выключен, то статические баннеры будут отображаться только во время загрузки игры. Если данный параметр включен, то статические баннеры будут отображаться и во время загрузки игры и в самой игре они тоже будут присутствовать!")]
+        public bool staticRBTInGame;
+
+        [Tooltip("Для более старых версий Unity требуется задержка старта SDK (задержка в кардах в секунду).\nСтавить задержку сдедует, если при запуске игры на Web сервере, после загрузки игры происходит краш или функции SDK не работают. В таком случае, обновите Unity до актуальной версии, либо поставьте задержку (рекомедруется: 20).\nЕсли SDK успешно загружается, задержку ставить не требуется.")]
+        [Min(0)]
+        public int SDKStartDelay;
 
 
 
@@ -247,6 +307,38 @@ namespace YG
             else if (i == 24) return fonts.it;
             else if (i == 25) return fonts.de;
             else if (i == 26) return fonts.hi;
+            else return null;
+        }
+
+        public int[] GetFontSize(int i)
+        {
+            if (i == 0) return fontsSizeCorrect.ru;
+            else if (i == 1) return fontsSizeCorrect.en;
+            else if (i == 2) return fontsSizeCorrect.tr;
+            else if (i == 3) return fontsSizeCorrect.az;
+            else if (i == 4) return fontsSizeCorrect.be;
+            else if (i == 5) return fontsSizeCorrect.he;
+            else if (i == 6) return fontsSizeCorrect.hy;
+            else if (i == 7) return fontsSizeCorrect.ka;
+            else if (i == 8) return fontsSizeCorrect.et;
+            else if (i == 9) return fontsSizeCorrect.fr;
+            else if (i == 10) return fontsSizeCorrect.kk;
+            else if (i == 11) return fontsSizeCorrect.ky;
+            else if (i == 12) return fontsSizeCorrect.lt;
+            else if (i == 13) return fontsSizeCorrect.lv;
+            else if (i == 14) return fontsSizeCorrect.ro;
+            else if (i == 15) return fontsSizeCorrect.tg;
+            else if (i == 16) return fontsSizeCorrect.tk;
+            else if (i == 17) return fontsSizeCorrect.uk;
+            else if (i == 18) return fontsSizeCorrect.uz;
+            else if (i == 19) return fontsSizeCorrect.es;
+            else if (i == 20) return fontsSizeCorrect.pt;
+            else if (i == 21) return fontsSizeCorrect.ar;
+            else if (i == 22) return fontsSizeCorrect.id;
+            else if (i == 23) return fontsSizeCorrect.ja;
+            else if (i == 24) return fontsSizeCorrect.it;
+            else if (i == 25) return fontsSizeCorrect.de;
+            else if (i == 26) return fontsSizeCorrect.hi;
             else return null;
         }
     }

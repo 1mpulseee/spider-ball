@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using YG;
+using System;
+
 public class world : MonoBehaviour
 {
     public SpriteRenderer bg;
@@ -11,8 +13,8 @@ public class world : MonoBehaviour
     {
         instance = this;
     }
-    private void OnEnable() => YandexGame.CloseVideoEvent += Reward;
-    private void OnDisable() => YandexGame.CloseVideoEvent -= Reward;  
+    private void OnEnable() => YandexGame.RewardVideoEvent += Reward;
+    private void OnDisable() => YandexGame.RewardVideoEvent -= Reward;  
     private List<Rigidbody2D> targets = new List<Rigidbody2D>();
     public Rigidbody2D GetTarget(Vector3 pos)
     {
@@ -40,7 +42,7 @@ public class world : MonoBehaviour
     public SpriteRenderer LvlRenderer;
     private void Start()
     {
-        LvlRenderer.sprite = Menu.instance.Wallpapers[YandexGame.savesData.Wallpaper];
+        LvlRenderer.sprite = Menu.instance.Wallpapers[YandexGame.savesData.CurrentWallpaper];
         LvlText.text = "Уровень " + Menu.instance.lvl.ToString();
         ChunkCount = 6;
         float C_L = Menu.instance.lvl;
@@ -67,21 +69,21 @@ public class world : MonoBehaviour
             ChunkCount++;
             C_L /= 1.5f;
         }
-        ChunkCount = (int)(ChunkCount * Random.Range(.5f, 1.5f));
+        ChunkCount = (int)(ChunkCount * UnityEngine.Random.Range(.5f, 1.5f));
 
-        LastChunk = Instantiate(Spawns[Random.Range(0, Spawns.Length)], transform);
+        LastChunk = Instantiate(Spawns[UnityEngine.Random.Range(0, Spawns.Length)], transform);
         player = GameObject.FindGameObjectWithTag("Player").transform;
         SpawnPoint = player.position;
         AddTargets(LastChunk.GetComponent<Chunk>().targets);
         for (int i = 1; i < ChunkCount; i++)
         {
-            int ChunkId = Random.Range(0, Chunks.Length);
+            int ChunkId = UnityEngine.Random.Range(0, Chunks.Length);
             float SpawnPos = LastChunk.transform.localPosition.x + LastChunk.GetComponent<Chunk>().end.localPosition.x - Chunks[ChunkId].GetComponent<Chunk>().start.transform.localPosition.x;
             LastChunk = Instantiate(Chunks[ChunkId], new Vector3(SpawnPos, 0, 0), Quaternion.identity);
             LastChunk.transform.SetParent(transform);
             AddTargets(LastChunk.GetComponent<Chunk>().targets);
         }
-        int FinishsId = Random.Range(0, Finishs.Length);
+        int FinishsId = UnityEngine.Random.Range(0, Finishs.Length);
         float SpawnPosF = LastChunk.transform.localPosition.x + LastChunk.GetComponent<Chunk>().end.localPosition.x - Finishs[FinishsId].GetComponent<Chunk>().start.transform.localPosition.x;
         LastChunk = Instantiate(Finishs[FinishsId], new Vector3(SpawnPosF, 0, 0), Quaternion.identity);
         Finish = GameObject.FindGameObjectWithTag("Finish").transform.position;

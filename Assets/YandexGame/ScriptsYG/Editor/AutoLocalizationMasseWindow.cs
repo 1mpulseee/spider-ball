@@ -3,11 +3,11 @@ using UnityEditor;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-namespace YG
+namespace YG.Insides
 {
     public class AutoLocalizationMasse : EditorWindow
     {
-        [MenuItem("YG/Localization/Auto Localization Masse")]
+        [MenuItem("Tools/PluginYG/Localization/Auto Localization Masse")]
         public static void ShowWindow()
         {
             GetWindow<AutoLocalizationMasse>("Auto Localization Masse");
@@ -98,6 +98,8 @@ namespace YG
                                 scrAL = obj.AddComponent<LanguageYG>();
 
                             scrAL.Serialize();
+                            scrAL.componentTextField = true;
+                            scrAL.Translate(19);
                         }
                     }
 
@@ -121,7 +123,7 @@ namespace YG
 
                 for (int i = 0; i < objectsTranlate.Count; i++)
                 {
-                    objectsTranlate[i] = (GameObject)EditorGUILayout.ObjectField($"{i + 1}. { objectsTranlate[i].name}", objectsTranlate[i], typeof(GameObject), false);
+                    objectsTranlate[i] = (GameObject)EditorGUILayout.ObjectField($"{i + 1}. {objectsTranlate[i].name}", objectsTranlate[i], typeof(GameObject), false);
                 }
 
                 if (objectsTranlate.Count > 10 && position.height < objectsTranlate.Count * 20.6f + 170)
@@ -129,7 +131,7 @@ namespace YG
             }
             else
             {
-                GUILayout.Label("Выберите Autolocation Inspector в настройках плагина\nInfoYG -> Translate Metod -> AutoLocalization", GUILayout.ExpandWidth(true));
+                GUILayout.Label("Select Auto Location Inspector in the plugin settings\nInfoYG -> Translate Metod -> AutoLocalization", GUILayout.ExpandWidth(true));
             }
         }
     }
